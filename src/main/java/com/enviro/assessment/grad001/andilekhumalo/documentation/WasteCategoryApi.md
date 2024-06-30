@@ -18,7 +18,7 @@ curl -X GET http://localhost:8080/api/waste-categories/{id}
 curl -X POST http://localhost:8080/api/waste-categories \
 -H "Content-Type: application/json" \
 -d '{
-  "name": "Plastic"
+  "category": "Plastic"
 }'
 ```
 
@@ -27,7 +27,7 @@ curl -X POST http://localhost:8080/api/waste-categories \
 curl -X PUT http://localhost:8080/api/waste-categories/{id} \
 -H "Content-Type: application/json" \
 -d '{
-  "name": "Updated Plastic"
+  "category": "Updated Plastic"
 }'
 ```
 
