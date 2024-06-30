@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
-public class DisposalGuideline {
+public class DisposalGuidelines {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;

@@ -1,7 +1,7 @@
 package com.enviro.assessment.grad001.andilekhumalo.service;
 
 import com.enviro.assessment.grad001.andilekhumalo.exception.NotFoundException;
-import com.enviro.assessment.grad001.andilekhumalo.model.WasteCategory;
+import com.enviro.assessment.grad001.andilekhumalo.model.WasteCategories;
 import com.enviro.assessment.grad001.andilekhumalo.repository.WasteCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,30 +14,30 @@ public class WasteCategoryService {
     @Autowired
     private WasteCategoryRepository repository;
 
-    public List<WasteCategory> getAllCategories() {
+    public List<WasteCategories> getAllCategories() {
         return repository.findAll();
     }
 
-    public WasteCategory getCategoryById(Long id) {
-        Optional<WasteCategory> category = repository.findById(id);
+    public WasteCategories getCategoryById(Long id) {
+        Optional<WasteCategories> category = repository.findById(id);
         if (category.isPresent()) {
             return category.get();
         }
         throw new NotFoundException("Category Not Found");
     }
 
-    public  WasteCategory save(WasteCategory wasteCategory) {
+    public WasteCategories save(WasteCategories wasteCategory) {
         return repository.save(wasteCategory);
     }
 
-    public WasteCategory update(Long id, WasteCategory wasteCategory) {
-        WasteCategory existingCategory = getCategoryById(id);
+    public WasteCategories update(Long id, WasteCategories wasteCategory) {
+        WasteCategories existingCategory = getCategoryById(id);
         existingCategory.setCategory(wasteCategory.getCategory());
         return repository.save(existingCategory);
     }
 
     public void delete(Long id) {
-        WasteCategory category = getCategoryById(id);
+        WasteCategories category = getCategoryById(id);
         repository.delete(category);
     }
 }

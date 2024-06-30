@@ -1,6 +1,6 @@
 package com.enviro.assessment.grad001.andilekhumalo.controller;
 
-import com.enviro.assessment.grad001.andilekhumalo.model.DisposalGuideline;
+import com.enviro.assessment.grad001.andilekhumalo.model.DisposalGuidelines;
 import com.enviro.assessment.grad001.andilekhumalo.service.DisposalGuidelineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,22 +16,22 @@ public class DisposalGuidelineController {
     private DisposalGuidelineService service;
 
     @GetMapping
-    public List<DisposalGuideline> getAllGuidelines() {
+    public List<DisposalGuidelines> getAllGuidelines() {
         return service.getAll();
     }
 
     @GetMapping("/{id}")
-    public DisposalGuideline getGuidelineById(@PathVariable Long id) {
+    public DisposalGuidelines getGuidelineById(@PathVariable Long id) {
         return service.getById(id);
     }
 
     @PostMapping
-    public DisposalGuideline addGuideline(@Validated @RequestBody DisposalGuideline disposalGuideline) {
+    public DisposalGuidelines addGuideline(@Validated @RequestBody DisposalGuidelines disposalGuideline) {
         return service.save(disposalGuideline);
     }
 
     @PutMapping("/{id}")
-    public DisposalGuideline updateGuideline(@PathVariable Long id, @Validated @RequestBody DisposalGuideline disposalGuideline) {
+    public DisposalGuidelines updateGuideline(@PathVariable Long id, @Validated @RequestBody DisposalGuidelines disposalGuideline) {
         return service.update(id, disposalGuideline);
     }
 
