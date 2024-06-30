@@ -32,7 +32,7 @@ public class WasteCategoryService {
 
     public WasteCategory update(Long id, WasteCategory wasteCategory) {
         WasteCategory existingCategory = getCategoryById(id);
-        existingCategory.setName(wasteCategory.getName());
+        existingCategory.setCategory(wasteCategory.getCategory());
         return repository.save(existingCategory);
     }
 

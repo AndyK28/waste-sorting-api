@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
-public class RecyclingTIps {
+public class RecyclingTips {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

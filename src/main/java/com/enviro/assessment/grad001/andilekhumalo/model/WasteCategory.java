@@ -9,8 +9,8 @@ public class WasteCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Name is mandatory")
-    String name;
+    @NotBlank(message = "Category is mandatory")
+    String category;
 
     public Long getId() {
         return id;
@@ -20,11 +20,11 @@ public class WasteCategory {
         this.id = id;
     }
 
-    public @NotBlank(message = "Name is mandatory") String getName() {
-        return name;
+    public @NotBlank(message = "Name is mandatory") String getCategory() {
+        return category;
     }
 
-    public void setName(@NotBlank(message = "Name is mandatory") String name) {
-        this.name = name;
+    public void setCategory(@NotBlank(message = "Name is mandatory") String category) {
+        this.category = category;
     }
 }
