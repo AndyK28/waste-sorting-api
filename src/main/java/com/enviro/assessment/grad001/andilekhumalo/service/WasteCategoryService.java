@@ -30,20 +30,17 @@ public class WasteCategoryService {
         throw new NotFoundException("Error 404: Not Found");
     }
 
-    public WasteCategories save(WasteCategories wasteCategory) {
+    public WasteCategories addCategory(WasteCategories wasteCategory) {
         return repository.save(wasteCategory);
     }
 
-    public WasteCategories update(Long id, WasteCategories wasteCategory) {
+    public WasteCategories updateCategory(Long id, WasteCategories wasteCategory) {
         WasteCategories existingCategory = getCategoryById(id);
-        if (existingCategory == null) {
-            throw new NotFoundException("Error 404: Not Found");
-        }
         existingCategory.setCategory(wasteCategory.getCategory());
         return repository.save(existingCategory);
     }
 
-    public void delete(Long id) {
+    public void deleteCategory(Long id) {
         WasteCategories category = getCategoryById(id);
         repository.delete(category);
     }

@@ -78,14 +78,14 @@ public class WasteCategoryServiceTest {
     }
 
     @Test
-    public void testSaveCategory() {
+    public void testAddCategoryCategory() {
         // Arrange
         WasteCategories category = new WasteCategories();
         category.setCategory("Plastic");
         when(repository.save(any(WasteCategories.class))).thenReturn(category);
 
         // Act
-        WasteCategories result = service.save(category);
+        WasteCategories result = service.addCategory(category);
 
         // Assert
         assertNotNull(result);
@@ -93,7 +93,7 @@ public class WasteCategoryServiceTest {
     }
 
     @Test
-    public void testUpdateCategory() {
+    public void testUpdateCategoryCategory() {
         // Arrange
         WasteCategories existingCategory = new WasteCategories();
         existingCategory.setId(1L);
@@ -105,7 +105,7 @@ public class WasteCategoryServiceTest {
         when(repository.save(any(WasteCategories.class))).thenReturn(updatedCategory);
 
         // Act
-        WasteCategories result = service.update(existingCategory.getId(), updatedCategory);
+        WasteCategories result = service.updateCategory(existingCategory.getId(), updatedCategory);
 
         // Assert
         assertNotNull(result);
@@ -113,7 +113,7 @@ public class WasteCategoryServiceTest {
     }
 
     @Test
-    public void testUpdateCategory_NotFound() {
+    public void testUpdateCategoryCategory_NotFound() {
         // Arrange
         WasteCategories updatedCategory = new WasteCategories();
         updatedCategory.setCategory("Metal");
@@ -121,14 +121,14 @@ public class WasteCategoryServiceTest {
 
         // Act & Assert
         NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            service.update(1L, updatedCategory);
+            service.updateCategory(1L, updatedCategory);
         });
 
         assertEquals("Error 404: Not Found", thrown.getMessage());
     }
 
     @Test
-    public void testDeleteCategory() {
+    public void testDeleteCategoryCategory() {
         // Arrange
         WasteCategories category = new WasteCategories();
         category.setId(1L);
@@ -136,20 +136,20 @@ public class WasteCategoryServiceTest {
         when(repository.findById(1L)).thenReturn(Optional.of(category));
 
         // Act
-        service.delete(category.getId());
+        service.deleteCategory(category.getId());
 
         // Assert
         verify(repository, times(1)).delete(category);
     }
 
     @Test
-    public void testDeleteCategory_NotFound() {
+    public void testDeleteCategoryCategory_NotFound() {
         // Arrange
         when(repository.findById(1L)).thenReturn(Optional.empty());
 
         // Act & Assert
         NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            service.delete(1L);
+            service.deleteCategory(1L);
         });
 
         assertEquals("Error 404: Not Found", thrown.getMessage());

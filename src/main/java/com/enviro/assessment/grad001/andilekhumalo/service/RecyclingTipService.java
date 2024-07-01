@@ -14,7 +14,7 @@ public class RecyclingTipService {
     @Autowired
     private RecyclingTipRepository repository;
 
-    public List<RecyclingTips> getAllTips() {
+    public List<RecyclingTips> getAllRecyclingTips() {
         List<RecyclingTips> recyclingTips = repository.findAll();
         if (recyclingTips.isEmpty()) {
             throw new NotFoundException("Error 404: Not Found");
@@ -22,7 +22,7 @@ public class RecyclingTipService {
         return recyclingTips;
     }
 
-    public RecyclingTips getTipById(Long id) {
+    public RecyclingTips getRecyclingTipById(Long id) {
         Optional<RecyclingTips> tip = repository.findById(id);
         if (tip.isPresent()) {
             return tip.get();
@@ -30,21 +30,18 @@ public class RecyclingTipService {
         throw new NotFoundException("Error 404: Not Found");
     }
 
-    public RecyclingTips saveTip(RecyclingTips tip) {
+    public RecyclingTips addRecyclingTip(RecyclingTips tip) {
         return repository.save(tip);
     }
 
-    public RecyclingTips updateTip(Long id, RecyclingTips tip) {
-        RecyclingTips existingTip = getTipById(id);
-        if (existingTip == null) {
-            throw new NotFoundException("Error 404: Not Found");
-        }
+    public RecyclingTips updateRecyclingTip(Long id, RecyclingTips tip) {
+        RecyclingTips existingTip = getRecyclingTipById(id);
         existingTip.setTip(tip.getTip());
         return repository.save(existingTip);
     }
 
-    public void deleteTip(Long id) {
-        RecyclingTips tip = getTipById(id);
+    public void deleteRecyclingTip(Long id) {
+        RecyclingTips tip = getRecyclingTipById(id);
         repository.delete(tip);
     }
 }

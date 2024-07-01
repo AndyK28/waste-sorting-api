@@ -36,9 +36,6 @@ public class DisposalGuidelineService {
 
     public DisposalGuidelines updateGuideline(Long id, DisposalGuidelines disposalGuideline) {
         DisposalGuidelines existingGuideline = getGuidelineById(id);
-        if (existingGuideline == null) {
-            throw new NotFoundException("Error 404: Not Found");
-        }
         existingGuideline.setGuideline(disposalGuideline.getGuideline());
         return repository.save(existingGuideline);
     }

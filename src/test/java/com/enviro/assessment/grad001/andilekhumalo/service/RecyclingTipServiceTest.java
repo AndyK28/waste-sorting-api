@@ -25,7 +25,7 @@ public class RecyclingTipServiceTest {
     }
 
     @Test
-    public void testGetAllTips() {
+    public void testGetAllRecyclingTips() {
         // Arrange
         RecyclingTips tip1 = new RecyclingTips();
         tip1.setId(1L);
@@ -39,7 +39,7 @@ public class RecyclingTipServiceTest {
         when(repository.findAll()).thenReturn(tips);
 
         // Act
-        List<RecyclingTips> result = service.getAllTips();
+        List<RecyclingTips> result = service.getAllRecyclingTips();
 
         // Assert
         assertEquals(tips.size(), result.size());
@@ -48,7 +48,7 @@ public class RecyclingTipServiceTest {
     }
 
     @Test
-    public void testGetTipById() {
+    public void testGetRecyclingTipById() {
         // Arrange
         RecyclingTips tip = new RecyclingTips();
         tip.setId(1L);
@@ -56,7 +56,7 @@ public class RecyclingTipServiceTest {
         when(repository.findById(1L)).thenReturn(Optional.of(tip));
 
         // Act
-        RecyclingTips result = service.getTipById(tip.getId());
+        RecyclingTips result = service.getRecyclingTipById(tip.getId());
 
         // Assert
         assertNotNull(result);
@@ -64,27 +64,27 @@ public class RecyclingTipServiceTest {
     }
 
     @Test
-    public void testGetTipById_NotFound() {
+    public void testGetRecyclingTipById_NotFound() {
         // Arrange
         when(repository.findById(1L)).thenReturn(Optional.empty());
 
         // Act & Assert
         NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            service.getTipById(1L);
+            service.getRecyclingTipById(1L);
         });
 
         assertEquals("Error 404: Not Found", thrown.getMessage());
     }
 
     @Test
-    public void testSaveTip() {
+    public void testAddRecyclingTip() {
         // Arrange
         RecyclingTips tip = new RecyclingTips();
         tip.setTip("Reduce plastic use");
         when(repository.save(any(RecyclingTips.class))).thenReturn(tip);
 
         // Act
-        RecyclingTips result = service.saveTip(tip);
+        RecyclingTips result = service.addRecyclingTip(tip);
 
         // Assert
         assertNotNull(result);
@@ -92,19 +92,19 @@ public class RecyclingTipServiceTest {
     }
 
     @Test
-    public void testUpdateTip() {
+    public void testUpdateRecyclingTip() {
         // Arrange
         RecyclingTips existingTip = new RecyclingTips();
         existingTip.setId(1L);
         existingTip.setTip("Reduce plastic use");
-        when(repository.findById(1L)).thenReturn(Optional.of(existingTip));
+        when(repository.findById(existingTip.getId())).thenReturn(Optional.of(existingTip));
 
         RecyclingTips updatedTip = new RecyclingTips();
         updatedTip.setTip("Recycle paper");
         when(repository.save(any(RecyclingTips.class))).thenReturn(updatedTip);
 
         // Act
-        RecyclingTips result = service.updateTip(existingTip.getId(), updatedTip);
+        RecyclingTips result = service.updateRecyclingTip(existingTip.getId(), updatedTip);
 
         // Assert
         assertNotNull(result);
@@ -112,7 +112,7 @@ public class RecyclingTipServiceTest {
     }
 
     @Test
-    public void testUpdateTip_NotFound() {
+    public void testUpdateRecyclingTip_NotFound() {
         // Arrange
         RecyclingTips updatedTip = new RecyclingTips();
         updatedTip.setTip("Recycle paper");
@@ -120,14 +120,14 @@ public class RecyclingTipServiceTest {
 
         // Act & Assert
         NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            service.updateTip(1L, updatedTip);
+            service.updateRecyclingTip(1L, updatedTip);
         });
 
         assertEquals("Error 404: Not Found", thrown.getMessage());
     }
 
     @Test
-    public void testDeleteTip() {
+    public void testDeleteRecyclingTip() {
         // Arrange
         RecyclingTips tip = new RecyclingTips();
         tip.setId(1L);
@@ -135,20 +135,20 @@ public class RecyclingTipServiceTest {
         when(repository.findById(1L)).thenReturn(Optional.of(tip));
 
         // Act
-        service.deleteTip(tip.getId());
+        service.deleteRecyclingTip(tip.getId());
 
         // Assert
         verify(repository, times(1)).delete(tip);
     }
 
     @Test
-    public void testDeleteTip_NotFound() {
+    public void testDeleteRecyclingTip_NotFound() {
         // Arrange
         when(repository.findById(1L)).thenReturn(Optional.empty());
 
         // Act & Assert
         NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            service.deleteTip(1L);
+            service.deleteRecyclingTip(1L);
         });
 
         assertEquals("Error 404: Not Found", thrown.getMessage());
