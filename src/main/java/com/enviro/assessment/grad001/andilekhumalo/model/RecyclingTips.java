@@ -27,4 +27,12 @@ public class RecyclingTips {
     public void setTip(@NotBlank(message = "Tip is mandatory") String tip) {
         this.tip = tip;
     }
+
+    @Override
+    public String toString() {
+        return "RecyclingTips{" +
+                "id=" + id +
+                ", tip='" + tip + '\'' +
+                '}';
+    }
 }

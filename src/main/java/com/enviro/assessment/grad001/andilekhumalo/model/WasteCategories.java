@@ -20,11 +20,19 @@ public class WasteCategories {
         this.id = id;
     }
 
-    public @NotBlank(message = "Name is mandatory") String getCategory() {
+    public @NotBlank(message = "Category is mandatory") String getCategory() {
         return category;
     }
 
-    public void setCategory(@NotBlank(message = "Name is mandatory") String category) {
+    public void setCategory(@NotBlank(message = "Category is mandatory") String category) {
         this.category = category;
+    }
+
+    @Override
+    public String toString() {
+        return "WasteCategories{" +
+                "id=" + id +
+                ", category='" + category + '\'' +
+                '}';
     }
 }

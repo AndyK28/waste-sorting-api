@@ -27,4 +27,12 @@ public class DisposalGuidelines {
     public void setGuideline(@NotBlank(message = "Guideline is mandatory") String guideline) {
         this.guideline = guideline;
     }
+
+    @Override
+    public String toString() {
+        return "DisposalGuidelines{" +
+                "id=" + id +
+                ", guideline='" + guideline + '\'' +
+                '}';
+    }
 }
