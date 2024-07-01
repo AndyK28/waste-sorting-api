@@ -14,7 +14,7 @@ public class DisposalGuidelineService {
     @Autowired
     private DisposalGuidelineRepository repository;
 
-    public List<DisposalGuidelines> getAll() {
+    public List<DisposalGuidelines> getAllGuidelines() {
         List<DisposalGuidelines> guidelines = repository.findAll();
         if (guidelines.isEmpty()) {
             throw new NotFoundException("No Guidelines Found In The Database");
@@ -22,7 +22,7 @@ public class DisposalGuidelineService {
         return guidelines;
     }
 
-    public DisposalGuidelines getById(Long id) {
+    public DisposalGuidelines getGuidelineById(Long id) {
         Optional<DisposalGuidelines> disposalGuideline = repository.findById(id);
         if (disposalGuideline.isPresent()) {
             return disposalGuideline.get();
@@ -30,18 +30,18 @@ public class DisposalGuidelineService {
         throw new NotFoundException("Disposal Guideline Not Found");
     }
 
-    public DisposalGuidelines save(DisposalGuidelines disposalGuideline) {
+    public DisposalGuidelines addGuideline(DisposalGuidelines disposalGuideline) {
         return repository.save(disposalGuideline);
     }
 
-    public DisposalGuidelines update(Long id, DisposalGuidelines disposalGuideline) {
-        DisposalGuidelines existingGuideline = getById(id);
+    public DisposalGuidelines updateGuideline(Long id, DisposalGuidelines disposalGuideline) {
+        DisposalGuidelines existingGuideline = getGuidelineById(id);
         existingGuideline.setGuideline(disposalGuideline.getGuideline());
         return repository.save(existingGuideline);
     }
 
-    public  void delete(Long id) {
-        DisposalGuidelines disposalGuideline = getById(id);
+    public  void deleteGuideline(Long id) {
+        DisposalGuidelines disposalGuideline = getGuidelineById(id);
         repository.delete(disposalGuideline);
     }
 }
