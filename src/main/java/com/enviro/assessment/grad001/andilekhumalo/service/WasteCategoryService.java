@@ -15,6 +15,10 @@ public class WasteCategoryService {
     private WasteCategoryRepository repository;
 
     public List<WasteCategories> getAllCategories() {
+        List<WasteCategories> categories = repository.findAll();
+        if (categories.isEmpty()) {
+            throw new NotFoundException("Error 404: Not Found");
+        }
         return repository.findAll();
     }
 
@@ -23,7 +27,7 @@ public class WasteCategoryService {
         if (category.isPresent()) {
             return category.get();
         }
-        throw new NotFoundException("Category Not Found");
+        throw new NotFoundException("Error 404: Not Found");
     }
 
     public WasteCategories save(WasteCategories wasteCategory) {
@@ -32,6 +36,9 @@ public class WasteCategoryService {
 
     public WasteCategories update(Long id, WasteCategories wasteCategory) {
         WasteCategories existingCategory = getCategoryById(id);
+        if (existingCategory == null) {
+            throw new NotFoundException("Error 404: Not Found");
+        }
         existingCategory.setCategory(wasteCategory.getCategory());
         return repository.save(existingCategory);
     }

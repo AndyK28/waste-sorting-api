@@ -17,7 +17,7 @@ public class DisposalGuidelineService {
     public List<DisposalGuidelines> getAllGuidelines() {
         List<DisposalGuidelines> guidelines = repository.findAll();
         if (guidelines.isEmpty()) {
-            throw new NotFoundException("No Guidelines Found In The Database");
+            throw new NotFoundException("Error 404: Not Found");
         }
         return guidelines;
     }
@@ -27,7 +27,7 @@ public class DisposalGuidelineService {
         if (disposalGuideline.isPresent()) {
             return disposalGuideline.get();
         }
-        throw new NotFoundException("Disposal Guideline Not Found");
+        throw new NotFoundException("Error 404: Not Found");
     }
 
     public DisposalGuidelines addGuideline(DisposalGuidelines disposalGuideline) {
@@ -36,11 +36,14 @@ public class DisposalGuidelineService {
 
     public DisposalGuidelines updateGuideline(Long id, DisposalGuidelines disposalGuideline) {
         DisposalGuidelines existingGuideline = getGuidelineById(id);
+        if (existingGuideline == null) {
+            throw new NotFoundException("Error 404: Not Found");
+        }
         existingGuideline.setGuideline(disposalGuideline.getGuideline());
         return repository.save(existingGuideline);
     }
 
-    public  void deleteGuideline(Long id) {
+    public void deleteGuideline(Long id) {
         DisposalGuidelines disposalGuideline = getGuidelineById(id);
         repository.delete(disposalGuideline);
     }
