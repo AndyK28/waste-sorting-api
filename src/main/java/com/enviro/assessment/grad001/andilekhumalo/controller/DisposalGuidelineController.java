@@ -3,6 +3,7 @@ package com.enviro.assessment.grad001.andilekhumalo.controller;
 import com.enviro.assessment.grad001.andilekhumalo.model.DisposalGuidelines;
 import com.enviro.assessment.grad001.andilekhumalo.service.DisposalGuidelineService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -16,23 +17,27 @@ public class DisposalGuidelineController {
     private DisposalGuidelineService service;
 
     @GetMapping
-    public List<DisposalGuidelines> getAllGuidelines() {
-        return service.getAll();
+    public ResponseEntity<List<DisposalGuidelines>> getAllGuidelines() {
+        List<DisposalGuidelines> guidelines = service.getAll();
+        return ResponseEntity.status(HttpStatus.OK).body(guidelines);
     }
 
     @GetMapping("/{id}")
-    public DisposalGuidelines getGuidelineById(@PathVariable Long id) {
-        return service.getById(id);
+    public ResponseEntity<DisposalGuidelines> getGuidelineById(@PathVariable Long id) {
+        DisposalGuidelines guideline = service.getById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(guideline);
     }
 
     @PostMapping
-    public DisposalGuidelines addGuideline(@Validated @RequestBody DisposalGuidelines disposalGuideline) {
-        return service.save(disposalGuideline);
+    public ResponseEntity<DisposalGuidelines> addGuideline(@Validated @RequestBody DisposalGuidelines disposalGuideline) {
+        DisposalGuidelines newGuideline = service.save(disposalGuideline);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newGuideline);
     }
 
     @PutMapping("/{id}")
-    public DisposalGuidelines updateGuideline(@PathVariable Long id, @Validated @RequestBody DisposalGuidelines disposalGuideline) {
-        return service.update(id, disposalGuideline);
+    public ResponseEntity<DisposalGuidelines> updateGuideline(@PathVariable Long id, @Validated @RequestBody DisposalGuidelines disposalGuideline) {
+        DisposalGuidelines updateGuideline = service.update(id, disposalGuideline);
+        return ResponseEntity.status(HttpStatus.OK).body(updateGuideline);
     }
 
     @DeleteMapping("/{id}")

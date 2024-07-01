@@ -15,7 +15,11 @@ public class DisposalGuidelineService {
     private DisposalGuidelineRepository repository;
 
     public List<DisposalGuidelines> getAll() {
-        return repository.findAll();
+        List<DisposalGuidelines> guidelines = repository.findAll();
+        if (guidelines.isEmpty()) {
+            throw new NotFoundException("No Guidelines Found In The Database");
+        }
+        return guidelines;
     }
 
     public DisposalGuidelines getById(Long id) {
