@@ -4,7 +4,9 @@ import com.enviro.assessment.grad001.andilekhumalo.exception.NotFoundException;
 import com.enviro.assessment.grad001.andilekhumalo.model.RecyclingTips;
 import com.enviro.assessment.grad001.andilekhumalo.repository.RecyclingTipRepository;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
 
@@ -12,6 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+
+@ExtendWith(MockitoExtension.class)
 public class RecyclingTipServiceTest {
     @Mock
     private RecyclingTipRepository repository;
@@ -19,23 +23,28 @@ public class RecyclingTipServiceTest {
     @InjectMocks
     private RecyclingTipService service;
 
+    private RecyclingTips tip1;
+    private RecyclingTips tip2;
+    private RecyclingTips tip3;
+
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
+        tip1 = new RecyclingTips(1L, "Reduce, Reuse, Recycle");
+        tip2 = new RecyclingTips(2L, "Educate Yourself and Others");
+        tip3 = new RecyclingTips(3L, "Buy Recycled Products");
+    }
+
+    @AfterEach
+    public void tearDown() {
+        tip1 = null;
+        tip2 = null;
+        tip3 = null;
     }
 
     @Test
     public void testGetAllRecyclingTips() {
         // Arrange
-        RecyclingTips tip1 = new RecyclingTips();
-        tip1.setId(1L);
-        tip1.setTip("Reduce plastic use");
-
-        RecyclingTips tip2 = new RecyclingTips();
-        tip2.setId(2L);
-        tip2.setTip("Recycle paper");
-
-        List<RecyclingTips> tips = Arrays.asList(tip1, tip2);
+        List<RecyclingTips> tips = Arrays.asList(tip1, tip2, tip3);
         when(repository.findAll()).thenReturn(tips);
 
         // Act
@@ -45,15 +54,15 @@ public class RecyclingTipServiceTest {
         assertEquals(tips.size(), result.size());
         assertEquals(tips.get(0).getTip(), result.get(0).getTip());
         assertEquals(tips.get(1).getTip(), result.get(1).getTip());
+        assertEquals(tips.get(2).getTip(), result.get(2).getTip());
     }
 
     @Test
     public void testGetRecyclingTipById() {
         // Arrange
-        RecyclingTips tip = new RecyclingTips();
-        tip.setId(1L);
-        tip.setTip("Reduce plastic use");
-        when(repository.findById(1L)).thenReturn(Optional.of(tip));
+        Long id = 1L;
+        RecyclingTips tip = tip1;
+        when(repository.findById(id)).thenReturn(Optional.of(tip));
 
         // Act
         RecyclingTips result = service.getRecyclingTipById(tip.getId());
@@ -66,21 +75,20 @@ public class RecyclingTipServiceTest {
     @Test
     public void testGetRecyclingTipById_NotFound() {
         // Arrange
-        when(repository.findById(1L)).thenReturn(Optional.empty());
+        Long id = 6L;
+        when(repository.findById(id)).thenReturn(Optional.empty());
 
         // Act & Assert
         NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            service.getRecyclingTipById(1L);
+            service.getRecyclingTipById(id);
         });
-
         assertEquals("Error 404: Not Found", thrown.getMessage());
     }
 
     @Test
     public void testAddRecyclingTip() {
         // Arrange
-        RecyclingTips tip = new RecyclingTips();
-        tip.setTip("Reduce plastic use");
+        RecyclingTips tip = tip1;
         when(repository.save(any(RecyclingTips.class))).thenReturn(tip);
 
         // Act
@@ -94,13 +102,10 @@ public class RecyclingTipServiceTest {
     @Test
     public void testUpdateRecyclingTip() {
         // Arrange
-        RecyclingTips existingTip = new RecyclingTips();
-        existingTip.setId(1L);
-        existingTip.setTip("Reduce plastic use");
-        when(repository.findById(existingTip.getId())).thenReturn(Optional.of(existingTip));
-
-        RecyclingTips updatedTip = new RecyclingTips();
-        updatedTip.setTip("Recycle paper");
+        Long id = 3L;
+        RecyclingTips existingTip = tip3;
+        when(repository.findById(id)).thenReturn(Optional.of(existingTip));
+        RecyclingTips updatedTip = tip2;
         when(repository.save(any(RecyclingTips.class))).thenReturn(updatedTip);
 
         // Act
@@ -114,25 +119,23 @@ public class RecyclingTipServiceTest {
     @Test
     public void testUpdateRecyclingTip_NotFound() {
         // Arrange
-        RecyclingTips updatedTip = new RecyclingTips();
-        updatedTip.setTip("Recycle paper");
-        when(repository.findById(1L)).thenReturn(Optional.empty());
+        Long id = 7L;
+        RecyclingTips updatedTip = tip3;
+        when(repository.findById(id)).thenReturn(Optional.empty());
 
         // Act & Assert
         NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            service.updateRecyclingTip(1L, updatedTip);
+            service.updateRecyclingTip(id, updatedTip);
         });
-
         assertEquals("Error 404: Not Found", thrown.getMessage());
     }
 
     @Test
     public void testDeleteRecyclingTip() {
         // Arrange
-        RecyclingTips tip = new RecyclingTips();
-        tip.setId(1L);
-        tip.setTip("Reduce plastic use");
-        when(repository.findById(1L)).thenReturn(Optional.of(tip));
+        Long id = 2L;
+        RecyclingTips tip = tip2;
+        when(repository.findById(id)).thenReturn(Optional.of(tip));
 
         // Act
         service.deleteRecyclingTip(tip.getId());
@@ -144,13 +147,13 @@ public class RecyclingTipServiceTest {
     @Test
     public void testDeleteRecyclingTip_NotFound() {
         // Arrange
-        when(repository.findById(1L)).thenReturn(Optional.empty());
+        Long id = 6L;
+        when(repository.findById(id)).thenReturn(Optional.empty());
 
         // Act & Assert
         NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            service.deleteRecyclingTip(1L);
+            service.deleteRecyclingTip(id);
         });
-
         assertEquals("Error 404: Not Found", thrown.getMessage());
     }
 }
