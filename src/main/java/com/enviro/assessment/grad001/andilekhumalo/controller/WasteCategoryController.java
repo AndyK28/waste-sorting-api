@@ -13,8 +13,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/waste-categories")
 public class WasteCategoryController {
+    private final WasteCategoryService service;
+
     @Autowired
-    private WasteCategoryService service;
+    public WasteCategoryController(WasteCategoryService service) {
+        this.service = service;
+    }
 
     @GetMapping
     public ResponseEntity<List<WasteCategories>> getAllCategories() {

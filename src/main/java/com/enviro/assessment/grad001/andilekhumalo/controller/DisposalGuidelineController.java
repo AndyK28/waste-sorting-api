@@ -13,8 +13,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/disposal-guidelines")
 public class DisposalGuidelineController {
+    private final DisposalGuidelineService service;
+
     @Autowired
-    private DisposalGuidelineService service;
+    public DisposalGuidelineController(DisposalGuidelineService service) {
+        this.service = service;
+    }
 
     @GetMapping
     public ResponseEntity<List<DisposalGuidelines>> getAllGuidelines() {

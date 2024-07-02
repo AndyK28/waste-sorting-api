@@ -13,8 +13,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/recycling-tips")
 public class RecyclingTipController {
+    private final RecyclingTipService service;
+
     @Autowired
-    private RecyclingTipService service;
+    public RecyclingTipController(RecyclingTipService service) {
+        this.service = service;
+    }
 
     @GetMapping
     public ResponseEntity<List<RecyclingTips>> getAllRecyclingTips() {
