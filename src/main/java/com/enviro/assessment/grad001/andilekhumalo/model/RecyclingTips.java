@@ -12,6 +12,15 @@ public class RecyclingTips {
     @NotBlank(message = "Tip is mandatory")
     private String tip;
 
+    // Default constructor
+    public RecyclingTips() {}
+
+    // Testing constructor
+    public RecyclingTips(Long id, String tip) {
+        this.id = id;
+        this.tip = tip;
+    }
+
     public Long getId() {
         return id;
     }

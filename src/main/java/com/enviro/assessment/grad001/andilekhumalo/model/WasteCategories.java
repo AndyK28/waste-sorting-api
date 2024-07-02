@@ -12,6 +12,16 @@ public class WasteCategories {
     @NotBlank(message = "Category is mandatory")
     String category;
 
+    // Default constructor
+    public WasteCategories() {
+    }
+
+    // Testing constructor
+    public WasteCategories(long id, String category) {
+        this.id = id;
+        this.category = category;
+    }
+
     public Long getId() {
         return id;
     }

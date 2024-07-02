@@ -12,6 +12,15 @@ public class DisposalGuidelines {
     @NotBlank(message = "Guideline is mandatory")
     String guideline;
 
+    // Default constructor
+    public DisposalGuidelines() {}
+
+    // Testing constructor
+    public DisposalGuidelines(Long id, String guideline) {
+        this.id = id;
+        this.guideline = guideline;
+    }
+
     public Long getId() {
         return id;
     }
