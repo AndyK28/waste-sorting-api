@@ -4,8 +4,10 @@ import com.enviro.assessment.grad001.andilekhumalo.exception.NotFoundException;
 import com.enviro.assessment.grad001.andilekhumalo.model.DisposalGuidelines;
 import com.enviro.assessment.grad001.andilekhumalo.repository.DisposalGuidelineRepository;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class DisposalGuidelineServiceTest {
     @Mock
     private DisposalGuidelineRepository repository;
@@ -22,123 +25,127 @@ public class DisposalGuidelineServiceTest {
     @InjectMocks
     private DisposalGuidelineService service;
 
+    private DisposalGuidelines guideline1;
+    private DisposalGuidelines guideline2;
+    private DisposalGuidelines guideline3;
+
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
+        guideline1 = new DisposalGuidelines(1L, "Separate materials like paper, plastic, glass, and metal " +
+                "from general waste and follow local recycling guidelines to ensure proper recycling.");
+        guideline2 = new DisposalGuidelines(2L, "Dispose of organic waste such as food scraps " +
+                "and yard trimmings in a compost bin to reduce landfill waste and create nutrient-rich soil.");
+        guideline3 = new DisposalGuidelines(3L, "Dispose of non-recyclable and non-compostable waste "  +
+                "in designated landfill bins, focusing on minimizing landfill waste through effective recycling and composting practices.");
+    }
+
+    @AfterEach
+    public void tearDown() {
+        guideline1 = null;
+        guideline2 = null;
+        guideline3 = null;
     }
 
     @Test
     public void testGetAll() {
         // Arrange
-        DisposalGuidelines guideline1 = new DisposalGuidelines();
-        guideline1.setId(1L);
-        guideline1.setGuideline("Dispose of plastics in the blue bin");
-
-        DisposalGuidelines guideline2 = new DisposalGuidelines();
-        guideline2.setId(2L);
-        guideline2.setGuideline("Dispose of papers in the green bin");
-
-        List<DisposalGuidelines> guidelines = Arrays.asList(guideline1, guideline2);
+        List<DisposalGuidelines> guidelines = Arrays.asList(guideline1, guideline2, guideline3);
         when(repository.findAll()).thenReturn(guidelines);
 
         // Act
         List<DisposalGuidelines> result = service.getAllGuidelines();
 
         // Assert
-        assertEquals(2, result.size());
-        assertEquals("Dispose of plastics in the blue bin", result.get(0).getGuideline());
-        assertEquals("Dispose of papers in the green bin", result.get(1).getGuideline());
+        List<String> expectedResult = Arrays.asList(guideline1.getGuideline(), guideline2.getGuideline(), guideline3.getGuideline());
+        assertEquals(expectedResult.size(), result.size());
+        assertEquals(expectedResult.get(0), result.get(0).getGuideline());
+        assertEquals(expectedResult.get(1), result.get(1).getGuideline());
+        assertEquals(expectedResult.get(2), result.get(2).getGuideline());
     }
 
     @Test
     public void testGetGuidelineById() {
         // Arrange
-        DisposalGuidelines guideline = new DisposalGuidelines();
-        guideline.setId(1L);
-        guideline.setGuideline("Dispose of plastics in the blue bin");
-        when(repository.findById(1L)).thenReturn(Optional.of(guideline));
+        Long id = 3L;
+        DisposalGuidelines newGuideline = guideline3;
+        when(repository.findById(id)).thenReturn(Optional.of(newGuideline));
 
         // Act
-        DisposalGuidelines result = service.getGuidelineById(1L);
+        DisposalGuidelines result = service.getGuidelineById(id);
 
         // Assert
         assertNotNull(result);
-        assertEquals("Dispose of plastics in the blue bin", result.getGuideline());
+        assertEquals(newGuideline.getGuideline(), result.getGuideline());
     }
 
     @Test
     public void testGetGuidelineById_NotFound() {
         // Arrange
-        when(repository.findById(1L)).thenReturn(Optional.empty());
+        Long id = 1L;
+        when(repository.findById(id)).thenReturn(Optional.empty());
 
         // Act & Assert
         NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            service.getGuidelineById(1L);
+            service.getGuidelineById(id);
         });
-
         assertEquals("Error 404: Not Found", thrown.getMessage());
     }
 
     @Test
     public void testAddGuideline() {
         // Arrange
-        DisposalGuidelines guideline = new DisposalGuidelines();
-        guideline.setGuideline("Dispose of plastics in the blue bin");
-        when(repository.save(any(DisposalGuidelines.class))).thenReturn(guideline);
+        DisposalGuidelines newGuideline = guideline2;
+        when(repository.save(any(DisposalGuidelines.class))).thenReturn(newGuideline);
 
         // Act
-        DisposalGuidelines result = service.addGuideline(guideline);
+        DisposalGuidelines result = service.addGuideline(newGuideline);
 
         // Assert
         assertNotNull(result);
-        assertEquals("Dispose of plastics in the blue bin", result.getGuideline());
+        assertEquals(newGuideline.getGuideline(), result.getGuideline());
     }
 
     @Test
     public void testUpdateGuideline() {
         // Arrange
-        DisposalGuidelines existingGuideline = new DisposalGuidelines();
-        existingGuideline.setId(1L);
-        existingGuideline.setGuideline("Dispose of plastics in the blue bin");
-        when(repository.findById(1L)).thenReturn(Optional.of(existingGuideline));
+        Long id = 1L;
+        DisposalGuidelines existingGuideline = guideline1;
+        when(repository.findById(id)).thenReturn(Optional.of(existingGuideline));
 
-        DisposalGuidelines updatedGuideline = new DisposalGuidelines();
-        updatedGuideline.setGuideline("Dispose of electronics at designated centers");
+        DisposalGuidelines updatedGuideline = guideline3;
         when(repository.save(any(DisposalGuidelines.class))).thenReturn(updatedGuideline);
 
         // Act
-        DisposalGuidelines result = service.updateGuideline(1L, updatedGuideline);
+        DisposalGuidelines result = service.updateGuideline(existingGuideline.getId(), updatedGuideline);
 
         // Assert
         assertNotNull(result);
-        assertEquals("Dispose of electronics at designated centers", result.getGuideline());
+        assertEquals(updatedGuideline.getGuideline(), result.getGuideline());
     }
 
     @Test
     public void testUpdateGuideline_NotFound() {
         // Arrange
-        DisposalGuidelines updatedGuideline = new DisposalGuidelines();
-        updatedGuideline.setGuideline("Dispose of electronics at designated centers");
-        when(repository.findById(1L)).thenReturn(Optional.empty());
+        Long id = 8L;
+        DisposalGuidelines updatedGuideline = guideline2;
+        when(repository.findById(id)).thenReturn(Optional.empty());
 
         // Act & Assert
         NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            service.updateGuideline(1L, updatedGuideline);
+            service.updateGuideline(id, updatedGuideline);
         });
-
         assertEquals("Error 404: Not Found", thrown.getMessage());
     }
 
     @Test
     public void testDeleteGuideline() {
         // Arrange
-        DisposalGuidelines guideline = new DisposalGuidelines();
-        guideline.setId(1L);
-        guideline.setGuideline("Dispose of plastics in the blue bin");
-        when(repository.findById(1L)).thenReturn(Optional.of(guideline));
+        Long id = 1L;
+        DisposalGuidelines guideline = guideline1;
+        when(repository.findById(id)).thenReturn(Optional.of(guideline));
 
         // Act
-        service.deleteGuideline(1L);
+        service.deleteGuideline(id);
 
         // Assert
         verify(repository, times(1)).delete(guideline);
@@ -147,13 +154,13 @@ public class DisposalGuidelineServiceTest {
     @Test
     public void testDeleteGuideline_NotFound() {
         // Arrange
-        when(repository.findById(1L)).thenReturn(Optional.empty());
+        Long id = 6L;
+        when(repository.findById(id)).thenReturn(Optional.empty());
 
         // Act & Assert
         NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            service.deleteGuideline(1L);
+            service.deleteGuideline(id);
         });
-
         assertEquals("Error 404: Not Found", thrown.getMessage());
     }
 }
