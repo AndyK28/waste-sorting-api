@@ -11,8 +11,12 @@ import java.util.Optional;
 
 @Service
 public class WasteCategoryService {
+    private final WasteCategoryRepository repository;
+
     @Autowired
-    private WasteCategoryRepository repository;
+    public WasteCategoryService(WasteCategoryRepository repository) {
+        this.repository = repository;
+    }
 
     public List<WasteCategories> getAllCategories() {
         List<WasteCategories> categories = repository.findAll();

@@ -11,8 +11,12 @@ import java.util.Optional;
 
 @Service
 public class RecyclingTipService {
+    private final RecyclingTipRepository repository;
+
     @Autowired
-    private RecyclingTipRepository repository;
+    public RecyclingTipService(RecyclingTipRepository repository) {
+        this.repository = repository;
+    }
 
     public List<RecyclingTips> getAllRecyclingTips() {
         List<RecyclingTips> recyclingTips = repository.findAll();

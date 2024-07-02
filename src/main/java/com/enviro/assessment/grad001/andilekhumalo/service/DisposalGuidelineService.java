@@ -11,8 +11,12 @@ import java.util.Optional;
 
 @Service
 public class DisposalGuidelineService {
+    private final DisposalGuidelineRepository repository;
+
     @Autowired
-    private DisposalGuidelineRepository repository;
+    public DisposalGuidelineService(DisposalGuidelineRepository repository) {
+        this.repository = repository;
+    }
 
     public List<DisposalGuidelines> getAllGuidelines() {
         List<DisposalGuidelines> guidelines = repository.findAll();
