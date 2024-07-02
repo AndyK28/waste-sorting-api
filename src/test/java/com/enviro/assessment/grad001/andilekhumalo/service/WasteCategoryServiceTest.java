@@ -28,8 +28,8 @@ public class WasteCategoryServiceTest {
 
     @BeforeEach
     void setUp() {
-        category1 = new WasteCategories(1L, "Plastic");
-        category2 = new WasteCategories(2L, "Paper");
+        category1 = new WasteCategories(1L, "Organic Waste");
+        category2 = new WasteCategories(2L, "Recyclable Waste");
     }
 
     @AfterEach

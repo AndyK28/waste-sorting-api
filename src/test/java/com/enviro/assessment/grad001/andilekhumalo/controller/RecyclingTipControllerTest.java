@@ -4,16 +4,15 @@ import com.enviro.assessment.grad001.andilekhumalo.exception.NotFoundException;
 import com.enviro.assessment.grad001.andilekhumalo.model.RecyclingTips;
 import com.enviro.assessment.grad001.andilekhumalo.service.RecyclingTipService;
 import org.junit.jupiter.api.*;
-import org.mockito.*;
-import org.mockito.MockitoAnnotations;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.Collections;
+import java.util.Arrays;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -22,43 +21,44 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(RecyclingTipController.class)
+@ExtendWith(MockitoExtension.class)
 public class RecyclingTipControllerTest {
-    private String recyclingTip;
-    private String updatedRecyclingTip;
-
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
     private RecyclingTipService service;
 
+    private RecyclingTips tip1;
+    private RecyclingTips tip2;
+
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
-        recyclingTip = "Recycle plastic bottles in the recycling bin";
-        updatedRecyclingTip = "Recycle cardboard boxes in the designated bin";
+        tip1 = new RecyclingTips(1L, "Recycle plastic bottles in the recycling bin");
+        tip2 = new RecyclingTips(2L, "Recycle cardboard boxes in the designated bin");
     }
 
     @AfterEach
     void tearDown() {
-        recyclingTip = null;
-        updatedRecyclingTip = null;
+        tip1 = null;
+        tip2 = null;
     }
 
     @Test
     public void testGetAllRecyclingTips_Success() throws Exception {
         // Arrange
-        RecyclingTips recyclingTips = new RecyclingTips();
-        recyclingTips.setId(1L);
-        recyclingTips.setTip(recyclingTip);
-        when(service.getAllRecyclingTips()).thenReturn(Collections.singletonList(recyclingTips));
+        RecyclingTips tip_1 = tip1;
+        RecyclingTips tip_2 = tip2;
+        when(service.getAllRecyclingTips()).thenReturn(Arrays.asList(tip_1, tip_2));
 
         // Act & Assert
         mockMvc.perform(get("/api/recycling-tips")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(recyclingTips.getId()))
-                .andExpect(jsonPath("$[0].tip").value(recyclingTips.getTip()));
+                .andExpect(jsonPath("$[0].id").value(tip_1.getId()))
+                .andExpect(jsonPath("$[0].tip").value(tip_1.getTip()))
+                .andExpect(jsonPath("$[1].id").value(tip_2.getId()))
+                .andExpect(jsonPath("$[1].tip").value(tip_2.getTip()));
     }
 
     @Test
@@ -75,10 +75,8 @@ public class RecyclingTipControllerTest {
     @Test
     public void testGetRecyclingTipById_Success() throws Exception {
         // Arrange
-        Long id = 1L;
-        RecyclingTips recyclingTips = new RecyclingTips();
-        recyclingTips.setId(id);
-        recyclingTips.setTip(recyclingTip);
+        Long id = 2L;
+        RecyclingTips recyclingTips = tip2;
         when(service.getRecyclingTipById(id)).thenReturn(recyclingTips);
 
         // Act & Assert
@@ -104,10 +102,7 @@ public class RecyclingTipControllerTest {
     @Test
     public void testAddRecyclingTips_Success() throws Exception {
         // Arrange
-        Long id = 1L;
-        RecyclingTips newRecyclingTip = new RecyclingTips();
-        newRecyclingTip.setId(id);
-        newRecyclingTip.setTip(recyclingTip);
+        RecyclingTips newRecyclingTip = tip2;
         when(service.addRecyclingTip(any(RecyclingTips.class))).thenReturn(newRecyclingTip);
 
         // Act & Assert
@@ -122,10 +117,7 @@ public class RecyclingTipControllerTest {
     @Test
     public void testAddRecyclingTips_BadRequest() throws Exception {
         // Arrange
-        Long id = 1L;
-        RecyclingTips newRecyclingTip = new RecyclingTips();
-        newRecyclingTip.setId(id);
-        newRecyclingTip.setTip(recyclingTip);
+        RecyclingTips newRecyclingTip = tip2;
         when(service.addRecyclingTip(any(RecyclingTips.class))).thenReturn(newRecyclingTip);
 
         mockMvc.perform(post("/api/recycling-tips")
@@ -138,9 +130,9 @@ public class RecyclingTipControllerTest {
     public void testUpdateRecyclingTips_Success() throws Exception {
         // Arrange
         Long id = 1L;
-
-        RecyclingTips updateRecyclingTip = new RecyclingTips();
-        updateRecyclingTip.setTip(updatedRecyclingTip);
+        RecyclingTips existingRecyclingTip = tip1;
+        when(service.getRecyclingTipById(id)).thenReturn(existingRecyclingTip);
+        RecyclingTips updateRecyclingTip = tip2;
         when(service.updateRecyclingTip(eq(id), any(RecyclingTips.class))).thenReturn(updateRecyclingTip);
 
         // Act & Assert
@@ -156,9 +148,9 @@ public class RecyclingTipControllerTest {
     public void testUpdateRecyclingTips_BadRequest() throws Exception {
         // Arrange
         Long id = 1L;
-        RecyclingTips updateRecyclingTip = new RecyclingTips();
-        updateRecyclingTip.setId(id);
-        updateRecyclingTip.setTip(updatedRecyclingTip);
+        RecyclingTips existingRecyclingTip = tip1;
+        when(service.updateRecyclingTip(eq(id), any(RecyclingTips.class))).thenReturn(existingRecyclingTip);
+        RecyclingTips updateRecyclingTip = tip2;
         when(service.updateRecyclingTip(eq(id), any(RecyclingTips.class))).thenReturn(updateRecyclingTip);
 
         // Act && Assert
