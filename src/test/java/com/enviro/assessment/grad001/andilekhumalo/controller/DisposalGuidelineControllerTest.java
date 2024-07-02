@@ -6,6 +6,9 @@ import com.enviro.assessment.grad001.andilekhumalo.service.DisposalGuidelineServ
 import org.junit.jupiter.api.*;
 import org.mockito.*;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -18,21 +21,21 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@WebMvcTest(DisposalGuidelineController.class)
 public class DisposalGuidelineControllerTest {
-    private MockMvc mockMvc;
     private String guideline;
     private String updatedGuideline;
 
-    @Mock
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
     private DisposalGuidelineService service;
 
-    @InjectMocks
-    private DisposalGuidelineController controller;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
         guideline = "Dispose plastic bottles in the recycling bin";
         updatedGuideline = "Recycle cardboard boxes in the designated bin";
     }
@@ -55,7 +58,7 @@ public class DisposalGuidelineControllerTest {
         mockMvc.perform(get("/api/disposal-guidelines")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].id").value(disposalGuidelines.getId()))
                 .andExpect(jsonPath("$[0].guideline").value(disposalGuidelines.getGuideline()));
     }
 
@@ -64,10 +67,9 @@ public class DisposalGuidelineControllerTest {
         // Arrange
         when(service.getAllGuidelines()).thenThrow(new NotFoundException("Error 404: Not Found"));
 
-        // Act
+        // Act && Assert
         mockMvc.perform(get("/api/disposal-guidelines")
                         .contentType(MediaType.APPLICATION_JSON))
-                // Assert
                 .andExpect(status().isNotFound());
     }
 
@@ -84,7 +86,7 @@ public class DisposalGuidelineControllerTest {
         mockMvc.perform(get("/api/disposal-guidelines/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(id))
+                .andExpect(jsonPath("$.id").value(disposalGuidelines.getId()))
                 .andExpect(jsonPath("$.guideline").value(disposalGuidelines.getGuideline()));
     }
 
@@ -94,10 +96,9 @@ public class DisposalGuidelineControllerTest {
         Long id = 1L;
         when(service.getGuidelineById(id)).thenThrow(new NotFoundException("Error 404: Not Found"));
 
-        // Act
+        // Act && Assert
         mockMvc.perform(get("/api/disposal-guidelines/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON))
-                // Assert
                 .andExpect(status().isNotFound());
     }
 
@@ -115,7 +116,7 @@ public class DisposalGuidelineControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"guideline\":\""+newGuideline.getGuideline()+"\"}"))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.id").value(newGuideline.getId()))
                 .andExpect(jsonPath("$.guideline").value(newGuideline.getGuideline()));
     }
 
@@ -175,7 +176,6 @@ public class DisposalGuidelineControllerTest {
         // Act & Assert
         mockMvc.perform(delete("/api/disposal-guidelines/{id}", id))
                 .andExpect(status().isNoContent());
-
         verify(service, times(1)).deleteGuideline(id);
     }
 
@@ -188,7 +188,6 @@ public class DisposalGuidelineControllerTest {
         // Act & Assert
         mockMvc.perform(delete("/api/disposal-guidelines/{id}", id))
                 .andExpect(status().isNotFound());
-
         verify(service, times(1)).deleteGuideline(id);
     }
 

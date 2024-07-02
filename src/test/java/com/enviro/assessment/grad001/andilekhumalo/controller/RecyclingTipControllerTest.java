@@ -6,6 +6,9 @@ import com.enviro.assessment.grad001.andilekhumalo.service.RecyclingTipService;
 import org.junit.jupiter.api.*;
 import org.mockito.*;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -18,21 +21,20 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@WebMvcTest(RecyclingTipController.class)
 public class RecyclingTipControllerTest {
-    private MockMvc mockMvc;
     private String recyclingTip;
     private String updatedRecyclingTip;
 
-    @Mock
-    private RecyclingTipService service;
+    @Autowired
+    private MockMvc mockMvc;
 
-    @InjectMocks
-    private RecyclingTipController controller;
+    @MockBean
+    private RecyclingTipService service;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
         recyclingTip = "Recycle plastic bottles in the recycling bin";
         updatedRecyclingTip = "Recycle cardboard boxes in the designated bin";
     }
@@ -55,7 +57,7 @@ public class RecyclingTipControllerTest {
         mockMvc.perform(get("/api/recycling-tips")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].id").value(recyclingTips.getId()))
                 .andExpect(jsonPath("$[0].tip").value(recyclingTips.getTip()));
     }
 
@@ -64,10 +66,9 @@ public class RecyclingTipControllerTest {
         // Arrange
         when(service.getAllRecyclingTips()).thenThrow(new NotFoundException("Error 404: Not Found"));
 
-        // Act
+        // Act && Assert
         mockMvc.perform(get("/api/recycling-tips")
                         .contentType(MediaType.APPLICATION_JSON))
-                // Assert
                 .andExpect(status().isNotFound());
     }
 
@@ -84,7 +85,7 @@ public class RecyclingTipControllerTest {
         mockMvc.perform(get("/api/recycling-tips/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(id))
+                .andExpect(jsonPath("$.id").value(recyclingTips.getId()))
                 .andExpect(jsonPath("$.tip").value(recyclingTips.getTip()));
     }
 
@@ -94,10 +95,9 @@ public class RecyclingTipControllerTest {
         Long id = 1L;
         when(service.getRecyclingTipById(id)).thenThrow(new NotFoundException("Error 404: Not Found"));
 
-        // Act
+        // Act && Assert
         mockMvc.perform(get("/api/recycling-tips/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON))
-                // Assert
                 .andExpect(status().isNotFound());
     }
 
@@ -154,12 +154,14 @@ public class RecyclingTipControllerTest {
 
     @Test
     public void testUpdateRecyclingTips_BadRequest() throws Exception {
+        // Arrange
         Long id = 1L;
         RecyclingTips updateRecyclingTip = new RecyclingTips();
         updateRecyclingTip.setId(id);
         updateRecyclingTip.setTip(updatedRecyclingTip);
         when(service.updateRecyclingTip(eq(id), any(RecyclingTips.class))).thenReturn(updateRecyclingTip);
 
+        // Act && Assert
         mockMvc.perform(put("/api/recycling-tips/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"tip\":\"\"}"))
@@ -174,7 +176,6 @@ public class RecyclingTipControllerTest {
         // Act & Assert
         mockMvc.perform(delete("/api/recycling-tips/{id}", id))
                 .andExpect(status().isNoContent());
-
         verify(service, times(1)).deleteRecyclingTip(id);
     }
 
@@ -187,7 +188,6 @@ public class RecyclingTipControllerTest {
         // Act && Assert
         mockMvc.perform(delete("/api/recycling-tips/{id}", id))
                 .andExpect(status().isNotFound());
-
         verify(service, times(1)).deleteRecyclingTip(id);
     }
 

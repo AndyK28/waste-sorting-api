@@ -5,6 +5,9 @@ import com.enviro.assessment.grad001.andilekhumalo.model.WasteCategories;
 import com.enviro.assessment.grad001.andilekhumalo.service.WasteCategoryService;
 import org.junit.jupiter.api.*;
 import org.mockito.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -17,21 +20,20 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@WebMvcTest(WasteCategoryController.class)
 public class WasteCategoryControllerTest {
-    private MockMvc mockMvc;
     private String category;
     private String updatedCategory;
 
-    @Mock
-    private WasteCategoryService service;
+    @Autowired
+    private MockMvc mockMvc;
 
-    @InjectMocks
-    private WasteCategoryController controller;
+    @MockBean
+    private WasteCategoryService service;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
         category = "Plastic";
         updatedCategory = "Cardboard";
     }
@@ -54,7 +56,7 @@ public class WasteCategoryControllerTest {
         mockMvc.perform(get("/api/waste-categories")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].id").value(wasteCategory.getId()))
                 .andExpect(jsonPath("$[0].category").value(wasteCategory.getCategory()));
     }
 
@@ -63,10 +65,9 @@ public class WasteCategoryControllerTest {
         // Arrange
         when(service.getAllCategories()).thenThrow(new NotFoundException("Error 404: Not Found"));
 
-        // Act
+        // Act && Assert
         mockMvc.perform(get("/api/waste-categories")
                         .contentType(MediaType.APPLICATION_JSON))
-                // Assert
                 .andExpect(status().isNotFound());
     }
 
@@ -83,7 +84,7 @@ public class WasteCategoryControllerTest {
         mockMvc.perform(get("/api/waste-categories/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(id))
+                .andExpect(jsonPath("$.id").value(wasteCategory.getId()))
                 .andExpect(jsonPath("$.category").value(wasteCategory.getCategory()));
     }
 
@@ -93,10 +94,9 @@ public class WasteCategoryControllerTest {
         Long id = 1L;
         when(service.getCategoryById(id)).thenThrow(new NotFoundException("Error 404: Not Found"));
 
-        // Act
+        // Act && Assert
         mockMvc.perform(get("/api/waste-categories/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON))
-                // Assert
                 .andExpect(status().isNotFound());
     }
 
@@ -114,7 +114,7 @@ public class WasteCategoryControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"category\":\""+newCategory.getCategory()+"\"}"))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.id").value(newCategory.getId()))
                 .andExpect(jsonPath("$.category").value(newCategory.getCategory()));
     }
 
