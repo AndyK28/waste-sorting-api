@@ -27,10 +27,8 @@ The following dependencies are used in this project:
 - **Spring Boot Starter Web**: Provides the core dependencies for building web applications, including RESTful services.
 - **Spring Boot Starter Data JPA**: Simplifies the implementation of JPA-based repositories.
 - **Spring Boot Starter Validation**: Provides validation support for Java Bean validation.
-- **H2 Database**: A lightweight in-memory database used for testing and development.
 - **Spring Boot Starter Test**: Includes testing libraries such as JUnit, Mockito, and Spring TestContext Framework.
-- **Mockito**: Used for creating mock objects for testing.
-- **JUnit Jupiter**: Provides the latest testing capabilities in JUnit 5.
+- **H2 Database**: A lightweight in-memory database used for testing and development.
 - **Spring Boot Maven Plugin**: Supports building and running Spring Boot applications as executable JARs or WARs.
 
 ---
