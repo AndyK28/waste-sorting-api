@@ -6,7 +6,6 @@ import com.enviro.assessment.grad001.andilekhumalo.repository.DisposalGuidelineR
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
@@ -85,9 +84,7 @@ public class DisposalGuidelineServiceTest {
         when(repository.findById(id)).thenReturn(Optional.empty());
 
         // Act & Assert
-        NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            service.getGuidelineById(id);
-        });
+        NotFoundException thrown = assertThrows(NotFoundException.class, () -> service.getGuidelineById(id));
         assertEquals("Error 404: Guideline with id "+id+" Not Found", thrown.getMessage());
     }
 
@@ -131,9 +128,7 @@ public class DisposalGuidelineServiceTest {
         when(repository.findById(id)).thenReturn(Optional.empty());
 
         // Act & Assert
-        NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            service.updateGuideline(id, updatedGuideline);
-        });
+        NotFoundException thrown = assertThrows(NotFoundException.class, () -> service.updateGuideline(id, updatedGuideline));
         assertEquals("Error 404: Guideline with id "+id+" Not Found", thrown.getMessage());
     }
 
@@ -158,9 +153,7 @@ public class DisposalGuidelineServiceTest {
         when(repository.findById(id)).thenReturn(Optional.empty());
 
         // Act & Assert
-        NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            service.deleteGuideline(id);
-        });
+        NotFoundException thrown = assertThrows(NotFoundException.class, () -> service.deleteGuideline(id));
         assertEquals("Error 404: Guideline with id "+id+" Not Found", thrown.getMessage());
     }
 }
