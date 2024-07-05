@@ -102,7 +102,7 @@ For example, if a resource is not found, the application will return a JSON resp
 ### Example Error Response
 ```json
 {
-    "message": "Error 404: Not Found"
+    "message": "Error 404: ____ Not Found"
 }
 ```
 
