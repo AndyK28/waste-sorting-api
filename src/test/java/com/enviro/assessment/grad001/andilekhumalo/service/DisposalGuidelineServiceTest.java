@@ -88,7 +88,7 @@ public class DisposalGuidelineServiceTest {
         NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
             service.getGuidelineById(id);
         });
-        assertEquals("Error 404: Not Found", thrown.getMessage());
+        assertEquals("Error 404: Guideline with id "+id+" Not Found", thrown.getMessage());
     }
 
     @Test
@@ -134,7 +134,7 @@ public class DisposalGuidelineServiceTest {
         NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
             service.updateGuideline(id, updatedGuideline);
         });
-        assertEquals("Error 404: Not Found", thrown.getMessage());
+        assertEquals("Error 404: Guideline with id "+id+" Not Found", thrown.getMessage());
     }
 
     @Test
@@ -161,6 +161,6 @@ public class DisposalGuidelineServiceTest {
         NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
             service.deleteGuideline(id);
         });
-        assertEquals("Error 404: Not Found", thrown.getMessage());
+        assertEquals("Error 404: Guideline with id "+id+" Not Found", thrown.getMessage());
     }
 }

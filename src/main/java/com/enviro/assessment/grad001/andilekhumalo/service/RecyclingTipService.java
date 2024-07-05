@@ -35,7 +35,7 @@ public class RecyclingTipService {
     public List<RecyclingTips> getAllRecyclingTips() {
         List<RecyclingTips> recyclingTips = repository.findAll();
         if (recyclingTips.isEmpty()) {
-            throw new NotFoundException("Error 404: Not Found");
+            throw new NotFoundException("Error 404: Tips Not Found");
         }
         return recyclingTips;
     }
@@ -52,7 +52,7 @@ public class RecyclingTipService {
         if (tip.isPresent()) {
             return tip.get();
         }
-        throw new NotFoundException("Error 404: Not Found");
+        throw new NotFoundException("Error 404: Tip with id "+id+" Not Found");
     }
 
     /**

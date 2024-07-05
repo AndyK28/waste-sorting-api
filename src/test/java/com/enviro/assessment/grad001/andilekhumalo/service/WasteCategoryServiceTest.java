@@ -77,7 +77,7 @@ public class WasteCategoryServiceTest {
         NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
             service.getCategoryById(id);
         });
-        assertEquals("Error 404: Not Found", thrown.getMessage());
+        assertEquals("Error 404: Category with id \"+id+\" Not Found", thrown.getMessage());
     }
 
     @Test
@@ -123,7 +123,7 @@ public class WasteCategoryServiceTest {
         NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
             service.updateCategory(id, category);
         });
-        assertEquals("Error 404: Not Found", thrown.getMessage());
+        assertEquals("Error 404: Category with id "+id+" Not Found", thrown.getMessage());
     }
 
     @Test
@@ -150,6 +150,6 @@ public class WasteCategoryServiceTest {
         NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
             service.deleteCategory(id);
         });
-        assertEquals("Error 404: Not Found", thrown.getMessage());
+        assertEquals("Error 404: Category with id "+id+" Not Found", thrown.getMessage());
     }
 }

@@ -35,7 +35,7 @@ public class DisposalGuidelineService {
     public List<DisposalGuidelines> getAllGuidelines() {
         List<DisposalGuidelines> guidelines = repository.findAll();
         if (guidelines.isEmpty()) {
-            throw new NotFoundException("Error 404: Not Found");
+            throw new NotFoundException("Error 404: Guidelines Not Found");
         }
         return guidelines;
     }
@@ -52,7 +52,7 @@ public class DisposalGuidelineService {
         if (disposalGuideline.isPresent()) {
             return disposalGuideline.get();
         }
-        throw new NotFoundException("Error 404: Not Found");
+        throw new NotFoundException("Error 404: Guideline with id "+id+" Not Found");
     }
 
     /**
