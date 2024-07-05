@@ -35,7 +35,7 @@ public class WasteCategoryService {
     public List<WasteCategories> getAllCategories() {
         List<WasteCategories> categories = repository.findAll();
         if (categories.isEmpty()) {
-            throw new NotFoundException("Error 404: Not Found");
+            throw new NotFoundException("Error 404: Categories Not Found");
         }
         return categories;
     }
@@ -52,7 +52,7 @@ public class WasteCategoryService {
         if (category.isPresent()) {
             return category.get();
         }
-        throw new NotFoundException("Error 404: Not Found");
+        throw new NotFoundException("Error 404: Category with id "+id+" Not Found");
     }
 
     /**

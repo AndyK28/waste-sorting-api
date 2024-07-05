@@ -79,10 +79,8 @@ public class RecyclingTipServiceTest {
         when(repository.findById(id)).thenReturn(Optional.empty());
 
         // Act & Assert
-        NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            service.getRecyclingTipById(id);
-        });
-        assertEquals("Error 404: Not Found", thrown.getMessage());
+        NotFoundException thrown = assertThrows(NotFoundException.class, () -> service.getRecyclingTipById(id));
+        assertEquals("Error 404: Tip with id "+id+" Not Found", thrown.getMessage());
     }
 
     @Test
@@ -124,10 +122,8 @@ public class RecyclingTipServiceTest {
         when(repository.findById(id)).thenReturn(Optional.empty());
 
         // Act & Assert
-        NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            service.updateRecyclingTip(id, updatedTip);
-        });
-        assertEquals("Error 404: Not Found", thrown.getMessage());
+        NotFoundException thrown = assertThrows(NotFoundException.class, () -> service.updateRecyclingTip(id, updatedTip));
+        assertEquals("Error 404: Tip with id "+id+" Not Found", thrown.getMessage());
     }
 
     @Test
@@ -151,9 +147,7 @@ public class RecyclingTipServiceTest {
         when(repository.findById(id)).thenReturn(Optional.empty());
 
         // Act & Assert
-        NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            service.deleteRecyclingTip(id);
-        });
-        assertEquals("Error 404: Not Found", thrown.getMessage());
+        NotFoundException thrown = assertThrows(NotFoundException.class, () -> service.deleteRecyclingTip(id));
+        assertEquals("Error 404: Tip with id "+id+" Not Found", thrown.getMessage());
     }
 }

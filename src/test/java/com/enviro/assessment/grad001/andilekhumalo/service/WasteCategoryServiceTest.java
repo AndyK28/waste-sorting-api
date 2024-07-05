@@ -6,7 +6,6 @@ import com.enviro.assessment.grad001.andilekhumalo.repository.WasteCategoryRepos
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
@@ -74,10 +73,8 @@ public class WasteCategoryServiceTest {
         when(repository.findById(id)).thenReturn(Optional.empty());
 
         // Act & Assert
-        NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            service.getCategoryById(id);
-        });
-        assertEquals("Error 404: Not Found", thrown.getMessage());
+        NotFoundException thrown = assertThrows(NotFoundException.class, () -> service.getCategoryById(id));
+        assertEquals("Error 404: Category with id "+id+" Not Found", thrown.getMessage());
     }
 
     @Test
@@ -120,10 +117,8 @@ public class WasteCategoryServiceTest {
         when(repository.findById(id)).thenReturn(Optional.empty());
 
         // Act & Assert
-        NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            service.updateCategory(id, category);
-        });
-        assertEquals("Error 404: Not Found", thrown.getMessage());
+        NotFoundException thrown = assertThrows(NotFoundException.class, () -> service.updateCategory(id, category));
+        assertEquals("Error 404: Category with id "+id+" Not Found", thrown.getMessage());
     }
 
     @Test
@@ -147,9 +142,7 @@ public class WasteCategoryServiceTest {
         when(repository.findById(id)).thenReturn(Optional.empty());
 
         // Act & Assert
-        NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            service.deleteCategory(id);
-        });
-        assertEquals("Error 404: Not Found", thrown.getMessage());
+        NotFoundException thrown = assertThrows(NotFoundException.class, () -> service.deleteCategory(id));
+        assertEquals("Error 404: Category with id "+id+" Not Found", thrown.getMessage());
     }
 }
