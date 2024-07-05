@@ -77,7 +77,7 @@ public class WasteCategoryServiceTest {
         NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
             service.getCategoryById(id);
         });
-        assertEquals("Error 404: Category with id \"+id+\" Not Found", thrown.getMessage());
+        assertEquals("Error 404: Category with id "+id+" Not Found", thrown.getMessage());
     }
 
     @Test
